@@ -1,0 +1,15 @@
+.wrapper {
+    text-align: center;
+    padding: 50px;
+}
+
+.wrapper div{
+    margin-top: 10px;
+}
+
+.formSummaryError {
+    border: 2px solid red;
+    color: red;
+    width: 200px;
+    margin: 0 auto;
+}
