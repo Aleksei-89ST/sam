@@ -1,25 +1,67 @@
-import logo from './logo.svg';
+import React from 'react';
+import HeaderContainer from './components/Header/HeaderContainer';
+import NavbarContainer from './components/Navbar/NavbarContainer';
+import ProfileContainer from './components/Profile/ProfileContainer';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
+import Musik from './components/Musik/Musik';
+import News from './components/News/News';
+import Settings from './components/Settings/Settings';
+// import Friends from './components/Friends/Friends';
+import UsersContainer from './components/Users/UsersContainer';
+import { Routes,Route } from 'react-router-dom';
+import Login from './components/login/login';
+import { connect } from 'react-redux';
+import { initializeApp } from './redux/app-reducer';
+import { compose } from 'redux';
+import { withRouter } from './components/common/WithRouter';
+import Preloader from './assets/Preloader';
+
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+
+
+class App extends React.Component {
+  componentDidMount() {
+    this.props.initializeApp()
+  }
+
+  render () {
+    if(!this.props.initialized){
+      return <Preloader />
+    }
+    return (
+      <div className='app-wrapper'>
+        <HeaderContainer />
+        <NavbarContainer />
+        <div className='app-wrapper-content'>
+          <Routes>
+              <Route path='/profile/*' element={ <ProfileContainer /> }/>
+              <Route path='/users' element={<UsersContainer />} />
+              <Route path='/dialogs/*' element={<DialogsContainer />} />
+              <Route path='/news' element={<News />} />
+              <Route path='/music' element={<Musik />} />
+              <Route path='/settings' element={<Settings />} />
+              <Route path='/login' element={<Login />} />
+              {/* <Route path='/friends' element={<Friends />} /> */}
+              
+            
+          </Routes>
+        </div>      
+      </div>
+    );
+    
+  }
 }
 
-export default App;
+let mapStateToProps = (state) => ({
+  initialized: state.app.initialized
+})
+
+
+export default compose(
+    withRouter,
+    connect(mapStateToProps, { initializeApp })
+) (App)
